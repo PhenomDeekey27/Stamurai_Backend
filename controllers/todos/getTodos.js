@@ -35,6 +35,7 @@ export const  getTodoById = async (req, res) => {
 // Get todos created by me
 export const getTodosCreatedByMe = async (req, res) => {
   try {
+    console.log("mytodos", "req.userid",req.user.id)
     const todos = await Todo.find({ createdBy: req.user.id });
     res.status(200).json({
       data:todos,

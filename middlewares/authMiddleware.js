@@ -1,17 +1,21 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken"
 
-export const verifyToken = (req, res, next) => {
-  const token = req.cookies?.token;
+export const verifyToken = async(req,res,next)=>{
+    try {
 
-  if (!token) {
-    return res.status(401).json({ message: "No token provided in cookies" });
-  }
+        const token = req.cookies.token 
+        console.log(token,"ttken")
+          if (!token) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
 
-  try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // attach decoded user info to request
+    req.user = decoded; // decoded contains { id, email, username }
+
     next();
-  } catch (error) {
-    return res.status(403).json({ message: "Invalid or expired token", error: error.message });
-  }
-};
+        
+    } catch (error) {
+          return res.status(401).json({ message: "Invalid or expired token" });
+        
+    }
+}

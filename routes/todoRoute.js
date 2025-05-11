@@ -1,10 +1,11 @@
 import express from 'express'
 import { getAllusers, getAllUserTodos, getOverdueTodos,getTodoById , getTodosAssignedToMe , getTodosCreatedByMe } from '../controllers/todos/getTodos.js'
-import { verifyToken } from '../middlewares/authMiddleware.js'
+
 import { createTodo } from '../controllers/todos/createTodo.js'
 import { updateTodos } from '../controllers/todos/updateTodo.js'
 import { deleteTodo } from '../controllers/todos/deleteTodo.js'
 import { assignTodo } from '../controllers/todos/assignTodo.js'
+import { verifyToken } from '../middlewares/authMiddleware.js'
 
 export const TodoRouter = express.Router()
 

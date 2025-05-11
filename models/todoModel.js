@@ -21,8 +21,9 @@ const todoSchema = new schema({
     },
     status:{
         type:String,
-        enum: ['Pending', 'In-progress', 'Completed'], 
-        default: 'pending'
+        enum: ['pending', 'in-progress', 'completed'], 
+        default: 'pending',
+         lowercase: true,
     },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },

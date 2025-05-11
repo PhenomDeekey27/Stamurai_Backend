@@ -6,10 +6,7 @@ import jwt from "jsonwebtoken"
 
 export const register =async(req,res)=>{
 
-    console.log("inr")
-    console.log(req.body,
-        "rbr"
-    )
+   
     try {
         
         const {name , email , password , role} = req.body
@@ -83,9 +80,6 @@ export const register =async(req,res)=>{
 }
 
 
-
-
-
 export const login = async (req, res) => {
   console.log("login", req.body);
 
@@ -104,7 +98,7 @@ export const login = async (req, res) => {
     if (!isPasswordValid)
       return res.status(400).json({ message: "Invalid password, please try again" });
 
-    const token = jwt.sign(
+    const token = await jwt.sign(
       {
         id: foundUser._id,
         email: foundUser.email,
@@ -116,11 +110,11 @@ export const login = async (req, res) => {
       }
     );
 
-    // ✅ Set token as HTTP-only cookie
+  
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -145,7 +139,7 @@ export const logout = async(req,res)=>{
         res.clearCookie("token", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            sameSite: "lax",
           });
         
           return res.status(200).json({ message: "Logged out successfully" });
@@ -160,3 +154,19 @@ export const logout = async(req,res)=>{
     }
 
 }
+
+
+
+export const getCurrentUser = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ message: "No token found" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
+
