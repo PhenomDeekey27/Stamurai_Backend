@@ -141,7 +141,7 @@ export const logout = async(req,res)=>{
       res.cookie("token", token, {
   httpOnly: true,              // ✅ must be true for middleware access
   secure: true,                // ✅ required on HTTPS (production)
-  sameSite: "none",            // ✅ required for cross-origin cookies
+  sameSite: "lax",            // ✅ required for cross-origin cookies
   path: "/",                   // ✅ ensure it's set for root
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
