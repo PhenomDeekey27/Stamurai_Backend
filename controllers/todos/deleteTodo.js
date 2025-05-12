@@ -9,7 +9,10 @@ export async function deleteTodo(req, res) {
     }
 
     if (todo.createdBy.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized to delete this todo" });
+      return res.status(401).json({
+        status:401, 
+        message: "Not authorized to delete this todo"
+       });
     }
 
     const removedTodo = await Todo.findByIdAndDelete(req.params.id);
