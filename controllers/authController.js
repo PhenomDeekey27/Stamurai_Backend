@@ -111,10 +111,11 @@ export const login = async (req, res) => {
     );
 
   
-  res.cookie("token", token, {
-  httpOnly: false,
-  secure: true,
-  sameSite: "none", // Required for cross-site cookies
+res.cookie("token", token, {
+  httpOnly: true,              // ✅ must be true for middleware access
+  secure: true,                // ✅ required on HTTPS (production)
+  sameSite: "none",            // ✅ required for cross-origin cookies
+  path: "/",                   // ✅ ensure it's set for root
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
@@ -137,11 +138,13 @@ export const login = async (req, res) => {
 export const logout = async(req,res)=>{
     console.log("api hit")
     try {
-        res.clearCookie("token", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-          });
+      res.cookie("token", token, {
+  httpOnly: true,              // ✅ must be true for middleware access
+  secure: true,                // ✅ required on HTTPS (production)
+  sameSite: "none",            // ✅ required for cross-origin cookies
+  path: "/",                   // ✅ ensure it's set for root
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
         
           return res.status(200).json({ message: "Logged out successfully" });
         
